@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WidgetBoxModel::MainWindow</class>
  <widget class="QWidget" name="WidgetBoxModel::MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>285</width>
+    <height>463</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="frameLayout">
    <property name="sizeConstraint">
     <enum>QLayout::SetFixedSize</enum>
@@ -71,6 +79,9 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QTextBrowser" name="detailsBrowser"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -88,5 +99,6 @@
    <header location="global">actionlist.h</header>
   </customwidget>
  </customwidgets>
+ <resources/>
  <connections/>
 </ui>

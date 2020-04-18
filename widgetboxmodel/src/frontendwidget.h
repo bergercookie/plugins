@@ -74,6 +74,7 @@ protected:
     bool eventFilter(QObject*, QEvent *event) override;
 
     void setShowActions(bool showActions);
+    void setShowDetails();
 
 private:
 
@@ -85,6 +86,7 @@ signals:
     void widgetHidden();
     void inputChanged(QString qry);
     void settingsWidgetRequested();
+    void detailsWidgetRequested();
 };
 
 }

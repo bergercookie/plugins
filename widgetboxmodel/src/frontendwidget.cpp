@@ -110,6 +110,9 @@ public:
     /** Indcates that the inputline should be cleared on hide */
     bool clearOnHide_;
 
+    /** Indicates whether the details browser is on */
+    bool detailsShown_;
+
 };
 
 /** ***************************************************************************/
@@ -150,9 +153,10 @@ WidgetBoxModel::FrontendWidget::FrontendWidget(QSettings *settings) : d(new Priv
     d->actionsListModel_ = new QStringListModel(this);
     d->ui.actionList->setModel(d->actionsListModel_);
 
-    // Hide lists
+    // Hide widgets
     d->ui.actionList->hide();
     d->ui.resultsList->hide();
+    d->ui.detailsBrowser->hide();
 
     // Settings button
     d->settingsButton_ = new SettingsButton(this);
@@ -477,8 +481,9 @@ void WidgetBoxModel::FrontendWidget::setShowActions(bool showActions) {
     if ( showActions && !d->actionsShown_ ) {
 
         // Skip if nothing selected
-        if ( !d->ui.resultsList->currentIndex().isValid())
+        if ( !d->ui.resultsList->currentIndex().isValid()) {
             return;
+        }
 
         // Get actions
         d->actionsListModel_->setStringList(d->ui.resultsList->model()->data(
@@ -504,7 +509,6 @@ void WidgetBoxModel::FrontendWidget::setShowActions(bool showActions) {
 
     // Hide actions
     if ( !showActions && d->actionsShown_ ) {
-
         d->ui.actionList->hide();
 
         // Change event filter pipeline: window -> resultslist -> lineedit
@@ -584,6 +588,18 @@ void WidgetBoxModel::FrontendWidget::mouseReleaseEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
 }
 
+/** ***************************************************************************/
+
+void WidgetBoxModel::FrontendWidget::setShowDetails() {
+  if (d->detailsShown_) { // currently on
+    d->ui.detailsBrowser->hide();
+    d->detailsShown_ = false;
+  }
+  else { // currently off
+    d->ui.detailsBrowser->show();
+    d->detailsShown_ = true;
+  }
+}
 
 /** ***************************************************************************/
 bool WidgetBoxModel::FrontendWidget::eventFilter(QObject *, QEvent *event) {
@@ -604,6 +620,11 @@ bool WidgetBoxModel::FrontendWidget::eventFilter(QObject *, QEvent *event) {
 
         case Qt::Key_Alt:
             setShowActions(true);
+            return true;
+
+        case Qt::Key_Control:
+            qDebug() << "CONTROL PRESSED";
+            setShowDetails();
             return true;
 
         case Qt::Key_Up:{
